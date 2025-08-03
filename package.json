@@ -1,0 +1,9 @@
+{
+  "name": "ecommerce-mern",
+  "private": true,
+  "scripts": {
+    "start": "npm-run-all --parallel start:backend start:frontend",
+    "start:backend": "cd ecommerce-backend && npm run dev",
+    "start:frontend": "cd ecommerce-frontend && npm run dev"
+  }
+}
