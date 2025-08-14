@@ -1,4 +1,3 @@
-// server.js
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
@@ -13,17 +12,20 @@ import wishlistRoutes from "./routes/wishlistRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 
-// ✅ Load environment variables FIRST
+// Load environment variables
 dotenv.config();
 
-// ✅ Connect to MongoDB
+// Connect to MongoDB
 connectDB();
 
 const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
+
+// Update CORS for Render deployment (replace "*" with your frontend URL if needed)
+app.use(cors({ origin: "*", credentials: true }));
+
 app.use(morgan("dev"));
 
 // Routes
@@ -39,7 +41,9 @@ app.get("/", (req, res) => {
   res.send("✅ API is running...");
 });
 
+// Render provides a PORT env variable, fallback to 5000
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
