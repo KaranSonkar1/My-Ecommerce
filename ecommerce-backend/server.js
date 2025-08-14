@@ -22,10 +22,8 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-
-// Update CORS for Render deployment (replace "*" with your frontend URL if needed)
-app.use(cors({ origin: "*", credentials: true }));
-
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(morgan("dev"));
 
 // Routes
@@ -41,9 +39,6 @@ app.get("/", (req, res) => {
   res.send("✅ API is running...");
 });
 
-// Render provides a PORT env variable, fallback to 5000
+// PORT
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
