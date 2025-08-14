@@ -22,9 +22,16 @@ const app = express();
 
 // Middleware
 app.use(express.json());
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(morgan("dev"));
+
+// CORS: allow only your deployed frontend
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+app.use(
+  cors({
+    origin: FRONTEND_URL,
+    credentials: true,
+  })
+);
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -34,9 +41,22 @@ app.use("/api/wishlist", wishlistRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/payment", paymentRoutes);
 
-// Test route
+// Root test route
 app.get("/", (req, res) => {
   res.send("✅ API is running...");
+});
+
+// 404 handler
+app.use((req, res) => {
+  res.status(404).json({ message: "Route not found" });
+});
+
+// Global error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal Server Error",
+  });
 });
 
 // PORT
