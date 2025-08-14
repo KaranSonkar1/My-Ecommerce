@@ -1,3 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@layer base {
+  /* global resets or base styles */
+}
+
+@layer components {
+  /* your custom components */
+}
+
+@layer utilities {
+  /* extra utilities */
+}
