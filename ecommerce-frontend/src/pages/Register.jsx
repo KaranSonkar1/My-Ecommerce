@@ -11,11 +11,16 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/api/auth/register", {
-        name,
-        email,
-        password,
-      });
+      // Use deployed backend URL from environment variable
+      const res = await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/auth/register`,
+        {
+          name,
+          email,
+          password,
+        }
+      );
+      alert("Registration successful!");
       navigate("/login");
     } catch (err) {
       alert(err.response?.data?.message || "Registration failed");
