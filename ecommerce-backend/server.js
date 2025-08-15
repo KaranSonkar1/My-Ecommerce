@@ -7,10 +7,6 @@ import connectDB from "./config/db.js";
 // Routes
 import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
-import cartRoutes from "./routes/cartRoutes.js";
-import wishlistRoutes from "./routes/wishlistRoutes.js";
-import orderRoutes from "./routes/orderRoutes.js";
-import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -18,18 +14,13 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
+const FRONTEND_URL = process.env.FRONTEND_URL || "*";
 app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(morgan("dev"));
 
 // Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
-app.use("/api/cart", cartRoutes);
-app.use("/api/wishlist", wishlistRoutes);
-app.use("/api/orders", orderRoutes);
-app.use("/api/payment", paymentRoutes);
 
 app.get("/", (req, res) => res.send("✅ API is running..."));
 
