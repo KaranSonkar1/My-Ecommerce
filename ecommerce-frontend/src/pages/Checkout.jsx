@@ -1,15 +1,14 @@
-import { useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
+import { useEffect } from "react";
 
 export default function Checkout() {
   const { cart, clearCart } = useCart();
   const { user } = useAuth();
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-
-  // ✅ Load Razorpay script once when component mounts
+  // Load Razorpay script
   useEffect(() => {
     const script = document.createElement("script");
     script.src = "https://checkout.razorpay.com/v1/checkout.js";
@@ -19,8 +18,7 @@ export default function Checkout() {
 
   const handlePayment = async () => {
     try {
-      // ✅ Backend already multiplies by 100, so send plain total
-      const { data } = await axios.post("http://localhost:5000/api/payment/order", {
+      const { data } = await axios.post("https://YOUR_BACKEND_URL/api/payment/order", {
         amount: total,
       });
 
@@ -30,15 +28,15 @@ export default function Checkout() {
       }
 
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // ✅ from frontend .env
+        key: "rzp_test_3hGhouaPibY6QR", // Your Razorpay Key
         amount: data.amount,
         currency: "INR",
-        name: "My Store",
+        name: "My Shop",
         description: "Order Payment",
         order_id: data.id,
         handler: async function (response) {
           try {
-            await axios.post("http://localhost:5000/api/payment/verify", {
+            await axios.post("https://YOUR_BACKEND_URL/api/payment/verify", {
               ...response,
               cart,
             });
@@ -61,22 +59,20 @@ export default function Checkout() {
       const razorpay = new window.Razorpay(options);
       razorpay.open();
     } catch (err) {
-      console.error("Error initiating payment", err);
-      alert("Payment initiation failed");
+      console.error("Payment initiation failed", err);
+      alert("Payment initiation failed. Please check your credentials.");
     }
   };
 
-  if (cart.length === 0) {
-    return <p className="p-6">🛒 Your cart is empty.</p>;
-  }
+  if (cart.length === 0) return <p className="mt-24 text-center">🛒 Your cart is empty.</p>;
 
   return (
-    <div className="p-6">
+    <div className="mt-24 px-6">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
       <p className="mb-4">Total: ₹{total}</p>
       <button
         onClick={handlePayment}
-        className="bg-green-500 text-white px-4 py-2 rounded"
+        className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
       >
         Pay Now
       </button>

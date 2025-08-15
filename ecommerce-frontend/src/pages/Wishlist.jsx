@@ -1,35 +1,32 @@
 import { useWishlist } from "../context/WishlistContext";
-import { useCart } from "../context/CartContext";
+import { Link } from "react-router-dom";
 
 export default function Wishlist() {
   const { wishlist, removeFromWishlist } = useWishlist();
-  const { addToCart } = useCart();
 
-  if (wishlist.length === 0) {
-    return <p className="p-6">💖 Your wishlist is empty.</p>;
-  }
+  if (wishlist.length === 0)
+    return <p className="mt-24 text-center">💔 Your wishlist is empty.</p>;
 
   return (
-    <div className="p-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {wishlist.map((item) => (
-        <div key={item._id} className="border p-4 rounded shadow">
-          <img src={item.image} alt={item.name} className="w-full h-48 object-cover" />
-          <h2 className="text-lg font-bold mt-2">{item.name}</h2>
-          <p className="text-gray-600">{item.price} ₹</p>
-          <button
-            onClick={() => addToCart(item)}
-            className="bg-green-500 text-white px-3 py-1 mt-2 rounded"
-          >
-            Add to Cart
-          </button>
-          <button
-            onClick={() => removeFromWishlist(item._id)}
-            className="bg-red-500 text-white px-3 py-1 mt-2 rounded ml-2"
-          >
-            Remove
-          </button>
-        </div>
-      ))}
+    <div className="mt-24 px-6">
+      <h1 className="text-2xl font-bold mb-4">Your Wishlist</h1>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {wishlist.map(product => (
+          <div key={product._id} className="border p-4 rounded shadow hover:shadow-lg relative">
+            <Link to={`/product/${product._id}`}>
+              <img src={product.image} alt={product.name} className="w-full h-48 object-cover rounded" />
+            </Link>
+            <h2 className="text-lg font-semibold mt-2">{product.name}</h2>
+            <p className="text-gray-700 mt-1">₹{product.price}</p>
+            <button
+              onClick={() => removeFromWishlist(product._id)}
+              className="absolute top-2 right-2 bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+            >
+              Remove ❤️
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
