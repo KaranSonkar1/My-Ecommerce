@@ -8,12 +8,9 @@ export default function AddProduct() {
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [image, setImage] = useState("");
-
   const API_URL = import.meta.env.VITE_API_URL;
 
-  if (!user?.isAdmin) {
-    return <p className="p-6 text-red-500">Access Denied: Admins only</p>;
-  }
+  if (!user?.isAdmin) return <p className="p-6 text-red-500">Access Denied: Admins only</p>;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
