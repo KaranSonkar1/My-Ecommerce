@@ -24,22 +24,8 @@ export default function Login() {
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6">
       <h1 className="text-2xl font-bold mb-4">Login</h1>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-        className="border p-2 w-full mb-3"
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-        className="border p-2 w-full mb-3"
-      />
+      <input type="email" placeholder="Email" className="border p-2 w-full mb-3" value={email} onChange={(e) => setEmail(e.target.value)} required/>
+      <input type="password" placeholder="Password" className="border p-2 w-full mb-3" value={password} onChange={(e) => setPassword(e.target.value)} required/>
       <button className="bg-green-500 text-white px-4 py-2 rounded w-full">Login</button>
     </form>
   );
